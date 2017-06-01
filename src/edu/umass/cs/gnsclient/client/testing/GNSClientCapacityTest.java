@@ -3,6 +3,7 @@ package edu.umass.cs.gnsclient.client.testing;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -56,6 +57,16 @@ public class GNSClientCapacityTest extends DefaultTest {
 	private static GuidEntry[] guidEntries;
 	private static GNSClientCommands[] clients;
 	private static ScheduledThreadPoolExecutor executor;
+	
+	private static int numFinishedWrites = 0;
+	private static long lastWriteFinishedTime = System.currentTimeMillis();
+	
+	// there is a separate updateField than someField because
+	// there are assertion checks on someField's value in read tests,
+	// so we don't want to break read tests because of update tests
+	// that update a field's value to a random value. 
+	private static final String updateField = "updateField";
+	private static final String updateValue = "updateValue";
 
 	private static Logger log = GNSClientConfig.getLogger();
 
@@ -64,12 +75,13 @@ public class GNSClientCapacityTest extends DefaultTest {
 	 */
 	public GNSClientCapacityTest() throws Exception {
 	}
-
+	
 	/**
 	 * @throws Exception
 	 */
 	@BeforeClass
 	public static void setup() throws Exception {
+		System.out.println("\n\n setup() called\n\n");
 		initStaticParams();
 		setupClientsAndGuids();
 	}
@@ -251,7 +263,7 @@ public class GNSClientCapacityTest extends DefaultTest {
 		numFinishedReads++;
 		lastReadFinishedTime = System.currentTimeMillis();
 	}
-
+	
 	private void blockingRead(int clientIndex, GuidEntry guid, boolean signed) {
 		executor.submit(new Runnable() {
 			public void run() {
@@ -303,6 +315,9 @@ public class GNSClientCapacityTest extends DefaultTest {
 	private void reset() {
 		numFinishedReads = 0;
 		lastReadFinishedTime = System.currentTimeMillis();
+		
+		numFinishedWrites = 0;
+		lastWriteFinishedTime = System.currentTimeMillis();
 	}
 
 	/**
@@ -315,6 +330,7 @@ public class GNSClientCapacityTest extends DefaultTest {
 		reset();
 		long t = System.currentTimeMillis();
 		for (int i = 0; i < numReads; i++) {
+			//FIXME: I think numReads % numClients should be i%numClients
 			blockingRead(numReads % numClients, guidEntries[0], false);
 		}
 		int j = 1;
@@ -331,6 +347,74 @@ public class GNSClientCapacityTest extends DefaultTest {
 				+ Util.df(numReads * 1.0 / (lastReadFinishedTime - t))
 				+ "K/s");
 		}
+	}
+	
+	/**
+	 * Computes the GNS update capacity.  
+	 * @throws InterruptedException
+	 * Throws InterruptedException exception if the sleep method in Thread.sleep
+	 * throws InterruptedException
+	 */
+	@Test
+	public void test_05_ParallelUpdateCapacity() throws InterruptedException 
+	{
+		Random rand = new Random();
+		for(int k=0; k<1; k++) 
+		{
+			int numWrites = Config.getGlobalInt(TC.NUM_REQUESTS);
+			reset();
+			long t = System.currentTimeMillis();
+			for (int i = 0; i < numWrites; i++) 
+			{
+				blockingWrite(i % numClients, 
+						guidEntries[i%guidEntries.length], updateField, updateValue+rand.nextDouble());
+			}
+			int j = 1;
+			System.out.print("[total_writes=" + numWrites+": ");
+			while (numFinishedWrites < numWrites) 
+			{
+				if (numFinishedWrites >= j) 
+				{
+					j *= 2;
+					System.out.print(numFinishedWrites 
+							+ "@" + Util.df(numFinishedWrites * 1.0 / (lastWriteFinishedTime - t))+"K/s ");
+				}
+				Thread.sleep(500);
+			}
+			System.out.print("] ");
+			System.out.print("parallel_unsigned_write_rate="
+					+ Util.df(numWrites * 1.0 / (lastWriteFinishedTime - t))
+					+ "K/s");
+		}
+	}
+	
+	private void blockingWrite(int clientIndex, GuidEntry guid, String fieldName, String fieldValue) 
+	{
+		// we are not performing reads after writes to check the value, as we want to measure the update 
+		// capacity
+		executor.submit(new Runnable() 
+		{
+			public void run() 
+			{
+				try 
+				{
+					clients[clientIndex].fieldUpdate(guid, fieldName, fieldValue);
+					
+					incrFinishedWrites();
+				} catch (Exception e) 
+				{
+					log.severe("Client " + clientIndex + " failed to write "
+							+ guid);
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	private synchronized static void incrFinishedWrites() 
+	{
+		numFinishedWrites++;
+		lastWriteFinishedTime = System.currentTimeMillis();
 	}
 
 	/**
