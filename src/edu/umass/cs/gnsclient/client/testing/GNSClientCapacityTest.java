@@ -382,7 +382,7 @@ public class GNSClientCapacityTest extends DefaultTest {
 				Thread.sleep(500);
 			}
 			System.out.print("] ");
-			System.out.print("parallel_unsigned_write_rate="
+			System.out.print("parallel_signed_write_rate="
 					+ Util.df(numWrites * 1.0 / (lastWriteFinishedTime - t))
 					+ "K/s");
 		}
