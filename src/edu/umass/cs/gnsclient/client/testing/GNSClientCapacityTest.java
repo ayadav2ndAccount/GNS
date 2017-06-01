@@ -134,8 +134,8 @@ public class GNSClientCapacityTest extends DefaultTest
 		//aditya: printing only first 10 account GUIDs, as printing whole list can be large.
 		System.out.println("Created (" + (numAccountGuids - numPreExisting)
 				+ ") or found pre-existing (" + numPreExisting
-				+ ") a total of " + numAccountGuids
-				+ " first 10 account GUIDs: "
+				+ ") a total of " + numAccountGuids +"GUIDs."
+				+ " Printing first 10 account GUIDs: "
 				+ Arrays.asList(accountGuidEntries).subList(0, 10));
 		
 		if (accountGuidsOnly) {
@@ -298,7 +298,8 @@ public class GNSClientCapacityTest extends DefaultTest
 				Config.getGlobalInt(TC.NUM_REQUESTS));
 		long t = System.currentTimeMillis();
 		for (int i = 0; i < numReads; i++) {
-			blockingRead(numReads % numClients, guidEntries[0], true);
+			//aditya: changed from numReads to i for uniform distribution
+			blockingRead(i % numClients, guidEntries[i%guidEntries.length], true);
 		}
 		System.out.print("[total_reads=" + numReads+": ");
 		int lastCount = 0;
@@ -334,8 +335,8 @@ public class GNSClientCapacityTest extends DefaultTest
 		reset();
 		long t = System.currentTimeMillis();
 		for (int i = 0; i < numReads; i++) {
-			//FIXME: I think numReads % numClients should be i%numClients
-			blockingRead(numReads % numClients, guidEntries[0], false);
+			//aditya: changed from numReads to i for uniform distribution
+			blockingRead(i % numClients, guidEntries[i%guidEntries.length], false);
 		}
 		int j = 1;
 		System.out.print("[total_reads=" + numReads+": ");
@@ -449,8 +450,8 @@ public class GNSClientCapacityTest extends DefaultTest
 			}
 		}
 		
-		System.out.println("About to delete " + accountGuidEntries.length
-				+ " first 10 account guids: " 
+		System.out.println("About to delete " + accountGuidEntries.length+" GUIDs."
+				+ " Priting first 10 account guids: " 
 				+ Arrays.asList(accountGuidEntries).subList(0, 10));
 		
 		for (GuidEntry accGuidEntry : accountGuidEntries) {
