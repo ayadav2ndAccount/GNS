@@ -69,7 +69,7 @@ public class GNSClientCapacityTest extends DefaultTest
 	private static final String updateValue = "updateValue";
 
 	private static Logger log = GNSClientConfig.getLogger();
-
+	
 	/**
 	 * @throws Exception
 	 */
@@ -437,41 +437,45 @@ public class GNSClientCapacityTest extends DefaultTest
 	public static void cleanup() throws Exception {
 		Thread.sleep(2000);
 		assert (clients != null && clients[0] != null);
-		if (!accountGuidsOnly) {
-			System.out.println("About to delete " + guidEntries.length
-					+ " sub-guids: " + Arrays.asList(guidEntries));
-			for (GuidEntry guidEntry : guidEntries) {
+		
+		if(Config.getGlobalBoolean(GNSTestingConfig.GNSTC.REMOVE_GUID_IN_CLEANUP))
+		{
+			if (!accountGuidsOnly) {
+				System.out.println("About to delete " + guidEntries.length
+						+ " sub-guids: " + Arrays.asList(guidEntries));
+				for (GuidEntry guidEntry : guidEntries) {
+					try {
+						log.log(Level.FINE, "About to delete sub-guid {0}",
+								new Object[] { guidEntry });
+						clients[0].guidRemove(guidEntry);
+						log.log(Level.FINE, "Deleted sub-guid {0}",
+								new Object[] { guidEntry });
+					} catch (Exception e) {
+						log.log(Level.WARNING, "Failed to delete sub-guid {0}",
+								new Object[] { guidEntry });
+						e.printStackTrace();
+						// continue with rest
+					}
+				}
+			}
+			
+			System.out.println("About to delete " + accountGuidEntries.length+" GUIDs."
+					+ " Priting first 10 account guids: " 
+					+ Arrays.asList(accountGuidEntries).subList(0, 10));
+			
+			for (GuidEntry accGuidEntry : accountGuidEntries) {
 				try {
-					log.log(Level.FINE, "About to delete sub-guid {0}",
-							new Object[] { guidEntry });
-					clients[0].guidRemove(guidEntry);
-					log.log(Level.FINE, "Deleted sub-guid {0}",
-							new Object[] { guidEntry });
+					log.log(Level.FINE, "About to delete account guid {0}",
+							new Object[] { accGuidEntry });
+					clients[0].accountGuidRemove(accGuidEntry);
+					log.log(Level.FINE, "Deleted account guid {0}",
+							new Object[] { accGuidEntry });
 				} catch (Exception e) {
-					log.log(Level.WARNING, "Failed to delete sub-guid {0}",
-							new Object[] { guidEntry });
+					log.log(Level.WARNING, "Failed to delete account guid {0}",
+							new Object[] { accGuidEntry });
 					e.printStackTrace();
 					// continue with rest
 				}
-			}
-		}
-		
-		System.out.println("About to delete " + accountGuidEntries.length+" GUIDs."
-				+ " Priting first 10 account guids: " 
-				+ Arrays.asList(accountGuidEntries).subList(0, 10));
-		
-		for (GuidEntry accGuidEntry : accountGuidEntries) {
-			try {
-				log.log(Level.FINE, "About to delete account guid {0}",
-						new Object[] { accGuidEntry });
-				clients[0].accountGuidRemove(accGuidEntry);
-				log.log(Level.FINE, "Deleted account guid {0}",
-						new Object[] { accGuidEntry });
-			} catch (Exception e) {
-				log.log(Level.WARNING, "Failed to delete account guid {0}",
-						new Object[] { accGuidEntry });
-				e.printStackTrace();
-				// continue with rest
 			}
 		}
 		

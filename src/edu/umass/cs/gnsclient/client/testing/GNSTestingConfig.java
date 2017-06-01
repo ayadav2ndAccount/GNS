@@ -42,7 +42,7 @@ public class GNSTestingConfig {
       // ignore as defaults will be used
     }
   }
-
+  
   static {
     load();
   }
@@ -60,7 +60,7 @@ public class GNSTestingConfig {
    * GNS testing config parameters.
    */
   public static enum GNSTC implements Config.ConfigurableEnum {
-
+	  
     /**
      * Number of GUIDs per account GUID.
      */
@@ -78,8 +78,15 @@ public class GNSTestingConfig {
      *
      * Code-breaking if enabled. Meant only for instrumentation.
      */
-    EXECUTE_NOOP_ENABLED(false),;
-
+    EXECUTE_NOOP_ENABLED(false),
+    
+    /**
+     * If true then GUIDs are removed in cleanup in GNSClientCapacityTest.
+     * Not removing the GUIDs is useful in repeating tests without reloading GUIDs.
+     */
+    REMOVE_GUID_IN_CLEANUP(true);
+	  
+	  
     final Object defaultValue;
 
     GNSTC(Object defaultValue) {
