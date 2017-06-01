@@ -205,21 +205,27 @@ public class GNSClientCapacityTest extends DefaultTest
 	 */
 	@Test
 	public void test_01_SingleWrite() {
-		GuidEntry guid = guidEntries[0];
-		try {
-			clients[0].fieldUpdate(guid, someField, someValue);
-			// verify written value
-			Assert.assertEquals(clients[0].fieldRead(guid, someField),
-					(someValue));
-			Assert.assertEquals(
-					clients[numClients > 1 ? 1 : 0].fieldRead(guid, someField),
-					(someValue));
-		} catch (IOException | ClientException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		//aditya: updating a field in each guid for read tests to succeed.
+		
+		for(int i=0; i<guidEntries.length; i++)
+		{
+			GuidEntry guid = guidEntries[i];
+			try 
+			{
+				clients[0].fieldUpdate(guid, someField, someValue);
+				// verify written value
+				Assert.assertEquals(clients[0].fieldRead(guid, someField),
+						(someValue));
+				Assert.assertEquals(
+						clients[numClients > 1 ? 1 : 0].fieldRead(guid, someField),
+						(someValue));
+			} catch (IOException | ClientException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
