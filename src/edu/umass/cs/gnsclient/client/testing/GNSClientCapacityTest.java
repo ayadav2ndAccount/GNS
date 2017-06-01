@@ -42,11 +42,11 @@ import edu.umass.cs.utils.Util;
  *
  */
 @FixMethodOrder(org.junit.runners.MethodSorters.NAME_ASCENDING)
-public class GNSClientCapacityTest extends DefaultTest {
-
+public class GNSClientCapacityTest extends DefaultTest 
+{	
 	private static String accountGUIDPrefix;
 	private static final String PASSWORD = "some_password";
-
+	
 	// following can not be final if we want to initialize via command-line
 	private static int numGuidsPerAccount;
 	private static boolean accountGuidsOnly;
@@ -73,21 +73,23 @@ public class GNSClientCapacityTest extends DefaultTest {
 	/**
 	 * @throws Exception
 	 */
-	public GNSClientCapacityTest() throws Exception {
+	public GNSClientCapacityTest() throws Exception 
+	{
 	}
 	
 	/**
 	 * @throws Exception
 	 */
 	@BeforeClass
-	public static void setup() throws Exception {
-		System.out.println("\n\n setup() called\n\n");
+	public static void setup() throws Exception 
+	{
 		initStaticParams();
 		setupClientsAndGuids();
 	}
-
+	
 	private static void initStaticParams() {
 		accountGUIDPrefix = Config.getGlobalString(GNSTC.ACCOUNT_GUID_PREFIX);
+		
 		numGuidsPerAccount = Config.getGlobalInt(GNSTC.NUM_GUIDS_PER_ACCOUNT);
 		accountGuidsOnly = Config.getGlobalBoolean(GNSTC.ACCOUNT_GUIDS_ONLY);
 		numClients = Config.getGlobalInt(TC.NUM_CLIENTS);
@@ -97,7 +99,7 @@ public class GNSClientCapacityTest extends DefaultTest {
 		accountGuidEntries = new GuidEntry[numAccountGuids];
 		guidEntries = new GuidEntry[numGuids];
 	}
-
+	
 	private static void setupClientsAndGuids() throws Exception {
 		clients = new GNSClientCommands[numClients];
 		executor = (ScheduledThreadPoolExecutor) Executors
@@ -128,12 +130,14 @@ public class GNSClientCapacityTest extends DefaultTest {
 			}
 			// any other exceptions should be thrown up
 		}
-
+		
+		//aditya: printing only first 10 account GUIDs, as printing whole list can be large.
 		System.out.println("Created (" + (numAccountGuids - numPreExisting)
 				+ ") or found pre-existing (" + numPreExisting
-				+ ") a total of " + numAccountGuids + " account GUIDs: "
-				+ Arrays.asList(accountGuidEntries));
-
+				+ ") a total of " + numAccountGuids
+				+ " first 10 account GUIDs: "
+				+ Arrays.asList(accountGuidEntries).subList(0, 10));
+		
 		if (accountGuidsOnly) {
 			for (int i = 0; i < accountGuidEntries.length; i++)
 				guidEntries[i] = accountGuidEntries[i];
@@ -192,10 +196,10 @@ public class GNSClientCapacityTest extends DefaultTest {
 		System.out.println("Created or found " + guidEntries.length
 				+ " pre-existing sub-guids " + Arrays.asList(guidEntries));
 	}
-
+	
 	private static final String someField = "someField";
 	private static final String someValue = "someValue";
-
+	
 	/**
 	 * Verifies a single write is successful.
 	 */
@@ -218,7 +222,7 @@ public class GNSClientCapacityTest extends DefaultTest {
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * @throws Exception
 	 * 
@@ -237,7 +241,7 @@ public class GNSClientCapacityTest extends DefaultTest {
 				+ "K/s averaged over " + numReads + " reads.");
 		System.out.println(DelayProfiler.getStats());
 	}
-
+	
 	/**
 	 * @throws Exception
 	 */
@@ -255,10 +259,10 @@ public class GNSClientCapacityTest extends DefaultTest {
 				+ "K/s averaged over " + numReads + " reads.");
 		System.out.println(DelayProfiler.getStats());
 	}
-
+	
 	private static int numFinishedReads = 0;
 	private static long lastReadFinishedTime = System.currentTimeMillis();
-
+	
 	synchronized static void incrFinishedReads() {
 		numFinishedReads++;
 		lastReadFinishedTime = System.currentTimeMillis();
@@ -416,7 +420,7 @@ public class GNSClientCapacityTest extends DefaultTest {
 		numFinishedWrites++;
 		lastWriteFinishedTime = System.currentTimeMillis();
 	}
-
+	
 	/**
 	 * Removes all account and sub-guids created during the test.
 	 * 
@@ -444,8 +448,11 @@ public class GNSClientCapacityTest extends DefaultTest {
 				}
 			}
 		}
+		
 		System.out.println("About to delete " + accountGuidEntries.length
-				+ " account guids: " + Arrays.asList(accountGuidEntries));
+				+ " first 10 account guids: " 
+				+ Arrays.asList(accountGuidEntries).subList(0, 10));
+		
 		for (GuidEntry accGuidEntry : accountGuidEntries) {
 			try {
 				log.log(Level.FINE, "About to delete account guid {0}",
@@ -460,12 +467,15 @@ public class GNSClientCapacityTest extends DefaultTest {
 				// continue with rest
 			}
 		}
+		
 		for (GNSClientCommands client : clients)
 			client.close();
+		
 		executor.shutdown();
 		System.out.println(DelayProfiler.getStats());
 	}
-
+	
+	
 	private static void processArgs(String[] args) throws IOException {
 		Config.register(args);
 	}
