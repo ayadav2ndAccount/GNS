@@ -344,7 +344,7 @@ public class GNSClientCapacityTest extends DefaultTest {
 	 * @throws ClientException
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
 	public void test_03_ParrallelWriteWithACLCapacity() throws InterruptedException, ClientException, IOException{
 		reset();
 		// The old GNS ACL implementation does not allow a GUID in ENTIRE_RECORD's ACL to write into a sub field.
@@ -440,7 +440,7 @@ public class GNSClientCapacityTest extends DefaultTest {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	@Test
+	//@Test
 	public void test_13_ParallelReadWithACLCapacity() throws ClientException, IOException, InterruptedException {
 		reset();
 		int numReads = Config.getGlobalInt(TC.NUM_REQUESTS);
@@ -474,7 +474,7 @@ public class GNSClientCapacityTest extends DefaultTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	//@Test
 	public void test_21_ParallelRemoveCapacity() throws Exception {
 		reset();
 		int numRemoves = numWriteAndRemove;
