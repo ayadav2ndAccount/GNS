@@ -84,15 +84,20 @@ public class GNSTestingConfig {
      * If true then GUIDs are removed in cleanup in GNSClientCapacityTest.
      * Not removing the GUIDs is useful in repeating tests without reloading GUIDs.
      */
-    REMOVE_GUIDS_IN_CLEANUP(true);
-    ;
-
+    REMOVE_GUIDS_IN_CLEANUP(true),
+    
+    /**
+     * If true then the coordinated reads are performed. 
+     */
+    COORDINATED_READS(false);
+	  
+	  
     final Object defaultValue;
-
+    
     GNSTC(Object defaultValue) {
       this.defaultValue = defaultValue;
     }
-
+    
     /**
      *
      * @return the default value
