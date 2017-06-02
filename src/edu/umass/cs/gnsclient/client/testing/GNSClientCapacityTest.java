@@ -95,7 +95,7 @@ public class GNSClientCapacityTest extends DefaultTest {
 	private static void setupClientsAndGuids() throws Exception {
 		clients = new GNSClient[numClients];
 		executor = (ThreadPoolExecutor) Executors
-				.newFixedThreadPool(50*numClients);
+				.newFixedThreadPool(numClients);
 		for (int i = 0; i < numClients; i++)
 			clients[i] = new GNSClientCommands();
 		@SuppressWarnings("deprecation")
