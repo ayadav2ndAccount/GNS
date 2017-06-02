@@ -78,7 +78,9 @@ public class GNSTestingConfig {
      *
      * Code-breaking if enabled. Meant only for instrumentation.
      */
-    EXECUTE_NOOP_ENABLED(false),;
+    EXECUTE_NOOP_ENABLED(false),
+    
+    ;
 
     final Object defaultValue;
 
