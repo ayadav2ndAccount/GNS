@@ -84,9 +84,9 @@ public class GNSTestingConfig {
      * If true then GUIDs are removed in cleanup in GNSClientCapacityTest.
      * Not removing the GUIDs is useful in repeating tests without reloading GUIDs.
      */
-    REMOVE_GUID_IN_CLEANUP(true);
-	  
-	  
+    REMOVE_GUIDS_IN_CLEANUP(true);
+    ;
+
     final Object defaultValue;
 
     GNSTC(Object defaultValue) {
