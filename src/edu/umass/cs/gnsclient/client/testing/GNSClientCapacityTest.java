@@ -499,8 +499,8 @@ public class GNSClientCapacityTest extends DefaultTest {
 	
 	/**
 	 * The test measures the write capacity by issuing updates to all GUIDs
-	 * in a round robin manner. This test updates updateField, which is different from someField,
-	 * and values for updates are also chosen randomly. 
+	 * in a round robin manner. This test updates the value of someField to a 
+	 * randomly chosen value.
 	 * 
 	 * @throws Exception The exception is thrown because of Thread.sleep method.
 	 */
