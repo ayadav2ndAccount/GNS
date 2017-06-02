@@ -127,8 +127,8 @@ public class GNSClientCapacityTest extends DefaultTest {
 		accessor = GuidUtils.lookupOrCreateAccountGuid(clients[0], accountGUIDPrefix+"_accessor", PASSWORD);
 				System.out.println("Created (" + (numAccountGuids - numPreExisting)
 				+ ") or found pre-existing (" + numPreExisting
-				+ ") a total of " + numAccountGuids + " account GUIDs: "
-				+ Arrays.asList(accountGuidEntries));
+				+ ") a total of " + numAccountGuids + " GUIDs.  Printing first 10 account GUIDs: "
+				+ Arrays.asList(accountGuidEntries).subList(0, 10));
 
 		if (accountGuidsOnly) {
 			for (int i = 0; i < accountGuidEntries.length; i++)
@@ -186,7 +186,8 @@ public class GNSClientCapacityTest extends DefaultTest {
 			assert (guidEntry != null);
 
 		System.out.println("Created or found " + guidEntries.length
-				+ " pre-existing sub-guids " + Arrays.asList(guidEntries));
+				+ " pre-existing sub-guids. Printing first 10 sub-guids "
+				+ Arrays.asList(guidEntries).subList(0, 10));
 	}
 
 	private static final String someField = "someField";
@@ -506,6 +507,7 @@ public class GNSClientCapacityTest extends DefaultTest {
 	@Test
 	public void test_22_ParralelWriteCapacityForAllGUIDs() throws Exception 
 	{
+		reset();
 		Random rand = new Random();
 		
 		int numWrites = Config.getGlobalInt(TC.NUM_REQUESTS);;
@@ -540,7 +542,8 @@ public class GNSClientCapacityTest extends DefaultTest {
 		assert (clients != null && clients[0] != null);
 		if (!accountGuidsOnly) {
 			System.out.println("About to delete " + guidEntries.length
-					+ " sub-guids: " + Arrays.asList(guidEntries));
+					+ " sub-guids. Printing first 10 sub-guids " 
+					+ Arrays.asList(guidEntries).subList(0, 10));
 			for (GuidEntry guidEntry : guidEntries) {
 				try {
 					log.log(Level.FINE, "About to delete sub-guid {0}",
@@ -558,7 +561,8 @@ public class GNSClientCapacityTest extends DefaultTest {
 			}
 		}
 		System.out.println("About to delete " + accountGuidEntries.length
-				+ " account guids: " + Arrays.asList(accountGuidEntries));
+				+ " account guids. Printing first 10 account guids " 
+				+ Arrays.asList(accountGuidEntries).subList(0, 10));
 		for (GuidEntry accGuidEntry : accountGuidEntries) {
 			try {
 				log.log(Level.FINE, "About to delete account guid {0}",
