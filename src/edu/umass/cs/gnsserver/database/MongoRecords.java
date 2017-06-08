@@ -42,8 +42,10 @@ import edu.umass.cs.gnsserver.gnsapp.recordmap.NameRecord;
 import edu.umass.cs.gnsserver.main.GNSConfig;
 import edu.umass.cs.gnsserver.utils.JSONUtils;
 import edu.umass.cs.gnsserver.utils.ValuesMap;
+import edu.umass.cs.reconfiguration.ReconfigurationConfig.RC;
 import edu.umass.cs.utils.Config;
 import edu.umass.cs.utils.DelayProfiler;
+import edu.umass.cs.utils.ThroughputProfiler;
 import edu.umass.cs.utils.Util;
 
 import org.json.JSONArray;
@@ -248,12 +250,18 @@ public class MongoRecords implements NoSQLRecords {
   public HashMap<ColumnField, Object> lookupSomeFields(String collectionName,
           String guid, ColumnField nameField, ColumnField valuesMapField, ArrayList<ColumnField> valuesMapKeys)
           throws RecordNotFoundException, FailedDBOperationException {
+	  
     if (guid == null) {
       DatabaseConfig.getLogger().log(Level.FINE, "{0} GUID is null: {1}", new Object[]{dbName, guid});
       throw new RecordNotFoundException(guid);
     }
     db.requestStart();
     try {
+    	if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
+    	{
+    		ThroughputProfiler.recordIncomingEvent("lookupSomeFieldsThpt");
+    	}
+    	
       String primaryKey = mongoCollectionSpecs.getCollectionSpec(collectionName).getPrimaryKey().getName();
       db.requestEnsureConnection();
 
@@ -313,6 +321,10 @@ public class MongoRecords implements NoSQLRecords {
           }
         }
         hashMap.put(valuesMapField, valuesMap);
+        if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
+        {
+        	ThroughputProfiler.recordIncomingEvent("lookupSomeFieldsThpt");
+        }
       }
       return hashMap;
     } catch (MongoException e) {

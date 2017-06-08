@@ -337,7 +337,8 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
     }
     return executed;
   }
-
+  
+  
   @Override
   public void shutdown() {
     if (localNameServer != null) {

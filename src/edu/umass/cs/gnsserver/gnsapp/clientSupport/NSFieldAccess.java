@@ -103,7 +103,7 @@ public class NSFieldAccess {
     }
     return valuesMap;
   }
-
+  
   private static ValuesMap lookupFieldLocalNoAuth(String guid, String field, ColumnFieldType returnFormat,
           BasicRecordMap database) throws FailedDBOperationException {
     NameRecord nameRecord = null;
