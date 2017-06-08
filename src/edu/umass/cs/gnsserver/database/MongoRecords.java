@@ -323,7 +323,7 @@ public class MongoRecords implements NoSQLRecords {
         hashMap.put(valuesMapField, valuesMap);
         if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
         {
-        	ThroughputProfiler.recordIncomingEvent("lookupSomeFieldsThpt");
+        	ThroughputProfiler.recordOutgoingEvent("lookupSomeFieldsThpt");
         }
       }
       return hashMap;
