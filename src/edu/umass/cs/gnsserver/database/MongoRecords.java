@@ -266,7 +266,7 @@ public class MongoRecords implements NoSQLRecords {
     {
 	    if(guidOfInterest.equals(guid) && valuesMapKeys.get(0).getName().equals("attr0"))
 	    {
-	    	if(Util.oneIn(100))
+	    	if(Util.oneIn(1000))
 	    	{
 	    		System.out.println("Returning cached for guid="
 	    				+guid+", valuesMapKeys "+valuesMapKeys);
