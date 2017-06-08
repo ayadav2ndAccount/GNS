@@ -247,8 +247,8 @@ public class MongoRecords implements NoSQLRecords {
   }
   
   // just for testing, to be removed later
-  static HashMap<ColumnField, Object> guidRetVal;
-  static String guidOfInterest = "";
+  //static HashMap<ColumnField, Object> guidRetVal;
+  //static String guidOfInterest = "";
   
   @Override
   public HashMap<ColumnField, Object> lookupSomeFields(String collectionName,
@@ -256,13 +256,12 @@ public class MongoRecords implements NoSQLRecords {
           ArrayList<ColumnField> valuesMapKeys)
           throws RecordNotFoundException, FailedDBOperationException 
   {
-	  
     if (guid == null) {
-      DatabaseConfig.getLogger().log(Level.FINE, "{0} GUID is null: {1}", new Object[]{dbName, guid});
-      throw new RecordNotFoundException(guid);
+    	DatabaseConfig.getLogger().log(Level.FINE, "{0} GUID is null: {1}", new Object[]{dbName, guid});
+    	throw new RecordNotFoundException(guid);
     }
     
-    if(valuesMapKeys != null)
+    /*if(valuesMapKeys != null)
     {
 	    if(guidOfInterest.equals(guid) && valuesMapKeys.get(0).getName().equals("attr0"))
 	    {
@@ -273,7 +272,7 @@ public class MongoRecords implements NoSQLRecords {
 	    	}
 	    	return guidRetVal;
 	    }
-    }
+    }*/
     
     db.requestStart();
     try {
@@ -347,7 +346,7 @@ public class MongoRecords implements NoSQLRecords {
         }
       }
       
-      if(valuesMapKeys != null)
+      /*if(valuesMapKeys != null)
       {
 	      if(valuesMapKeys.get(0).getName().equals("attr0"))
 	      {
@@ -355,7 +354,7 @@ public class MongoRecords implements NoSQLRecords {
 	    	  guidRetVal = hashMap;
 	    	  System.out.println("Assigning guidOfInterest="+guid+" , valuesMapKeys="+valuesMapKeys);
 	      }
-      }
+      }*/
       
       return hashMap;
     } catch (MongoException e) {
