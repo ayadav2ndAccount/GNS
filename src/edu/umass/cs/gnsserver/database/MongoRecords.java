@@ -262,13 +262,22 @@ public class MongoRecords implements NoSQLRecords {
       throw new RecordNotFoundException(guid);
     }
     
-    if(guidOfInterest.equals(guid) && valuesMapKeys.get(0).equals("attr0"))
+    if(valuesMapKeys != null)
     {
-    	if(Util.oneIn(100))
-    	{
-    		System.out.println("Returning cached value for guid="+guid);
-    	}
-    	return guidRetVal;
+	    if(guidOfInterest.equals(guid) && valuesMapKeys.get(0).equals("attr0"))
+	    {
+	    	//if(Util.oneIn(100))
+	    	{
+	    		System.out.println("Returning cached for guid="
+	    				+guid+", valuesMapKeys "+valuesMapKeys);
+	    	}
+	    	return guidRetVal;
+	    }
+	    else
+	    {
+	    	System.out.println("DBoperation for guid="
+	    				+guid+", valuesMapKeys "+valuesMapKeys);
+	    }
     }
     
     db.requestStart();
@@ -343,11 +352,14 @@ public class MongoRecords implements NoSQLRecords {
         }
       }
       
-      if(valuesMapKeys.get(0).getName().equals("attr0"))
+      if(valuesMapKeys != null)
       {
-    	  guidOfInterest = guid;
-    	  guidRetVal = hashMap;
-    	  System.out.println("Assigning guidOfInterest="+guid);
+	      if(valuesMapKeys.get(0).getName().equals("attr0"))
+	      {
+	    	  guidOfInterest = guid;
+	    	  guidRetVal = hashMap;
+	    	  System.out.println("Assigning guidOfInterest="+guid+" , valuesMapKeys="+valuesMapKeys);
+	      }
       }
       
       return hashMap;
