@@ -245,7 +245,11 @@ public class MongoRecords implements NoSQLRecords {
       db.requestDone();
     }
   }
-
+  
+  // just for testing, to be removed later
+  static HashMap<ColumnField, Object> guidRetVal;
+  static String guidOfInterest = "";
+  
   @Override
   public HashMap<ColumnField, Object> lookupSomeFields(String collectionName,
           String guid, ColumnField nameField, ColumnField valuesMapField, ArrayList<ColumnField> valuesMapKeys)
@@ -255,6 +259,16 @@ public class MongoRecords implements NoSQLRecords {
       DatabaseConfig.getLogger().log(Level.FINE, "{0} GUID is null: {1}", new Object[]{dbName, guid});
       throw new RecordNotFoundException(guid);
     }
+    
+    if(guidOfInterest.equals(guid))
+    {
+    	if(Util.oneIn(100))
+    	{
+    		System.out.println("Returning cached value for guid="+guid);
+    	}
+    	return guidRetVal;
+    }
+    
     db.requestStart();
     try {
     	if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
@@ -326,6 +340,11 @@ public class MongoRecords implements NoSQLRecords {
         	ThroughputProfiler.recordOutgoingEvent("lookupSomeFieldsThpt");
         }
       }
+      
+      guidOfInterest = guid;
+      guidRetVal = hashMap;
+      System.out.println("Assigning guidOfInterest="+guid);
+      
       return hashMap;
     } catch (MongoException e) {
       DatabaseConfig.getLogger().log(Level.FINE, "{0} lookupSomeFields failed: {1}", new Object[]{dbName, e.getMessage()});
@@ -335,7 +354,8 @@ public class MongoRecords implements NoSQLRecords {
       db.requestDone();
     }
   }
-
+  
+  
   private Object getWithDotNotation(String key, BasicDBObject bson) throws JSONException {
     if (key.contains(".")) {
       int indexOfDot = key.indexOf(".");
