@@ -291,8 +291,14 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
           Select.handleSelectResponse((SelectResponsePacket) request, this);
           break;
         case COMMAND:
-          CommandHandler.handleCommandPacket((CommandPacket) request, doNotReplyToClient, this);
-          break;
+        {
+        	if(Util.oneIn(100))
+        	{
+        		System.out.println("GNS command execution thread name "+Thread.currentThread().getName());
+        	}
+        	CommandHandler.handleCommandPacket((CommandPacket) request, doNotReplyToClient, this);
+        	break;
+        }
         case ADMIN_COMMAND:
           CommandHandler.handleCommandPacket((AdminCommandPacket) request, doNotReplyToClient, this);
           break;
@@ -304,7 +310,7 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
           return false;
       }
       executed = true;
-
+      
       // arun: always clean up all created state upon exiting
       if (request instanceof RequestIdentifier && prev == null) {
         GNSConfig.getLogger().log(Level.FINE,
