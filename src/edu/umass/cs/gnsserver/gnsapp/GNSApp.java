@@ -536,7 +536,8 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
   static {
     curValueRequestFields.add(NameRecord.VALUES_MAP);
   }
-
+  
+  
   /**
    *
    * @param name
@@ -544,7 +545,8 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
    */
   @Override
   public String checkpoint(String name) {
-    try {
+	  return "";
+    /*try {
       NameRecord nameRecord = NameRecord
               .getNameRecord(nameRecordDB, name);
       GNSConfig.getLogger().log(
@@ -564,7 +566,7 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
               "State not read from DB: {0}", e.getMessage());
       e.printStackTrace();
     }
-    return null;
+    return null;*/
   }
 
   /**
