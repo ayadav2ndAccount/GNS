@@ -274,7 +274,7 @@ public class MongoRecords implements NoSQLRecords {
 	    }
     }*/
     
-    db.requestStart();
+    //db.requestStart();
     try {
     	if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
     	{
@@ -282,7 +282,7 @@ public class MongoRecords implements NoSQLRecords {
     	}
     	
       String primaryKey = mongoCollectionSpecs.getCollectionSpec(collectionName).getPrimaryKey().getName();
-      db.requestEnsureConnection();
+      //db.requestEnsureConnection();
 
       DBCollection collection = db.getCollection(collectionName);
       BasicDBObject query = new BasicDBObject(primaryKey, guid);
@@ -362,7 +362,7 @@ public class MongoRecords implements NoSQLRecords {
       throw new FailedDBOperationException(collectionName, guid,
               "Original mongo exception:" + e.getMessage());
     } finally {
-      db.requestDone();
+      //db.requestDone();
     }
   }
   
