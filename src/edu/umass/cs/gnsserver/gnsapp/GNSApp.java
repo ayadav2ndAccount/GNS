@@ -295,7 +295,13 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
         	if(Util.oneIn(100))
         	{
         		System.out.println("GNS command execution thread name "+Thread.currentThread().getName());
+        		
+        		if(((CommandPacket) request).getCommandType().isRead())
+        		{
+        			System.out.println("The request stack trace "+ Thread.currentThread().getStackTrace());
+        		}
         	}
+        	
         	CommandHandler.handleCommandPacket((CommandPacket) request, doNotReplyToClient, this);
         	break;
         }
@@ -551,8 +557,7 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
    */
   @Override
   public String checkpoint(String name) {
-	  return "";
-    /*try {
+    try {
       NameRecord nameRecord = NameRecord
               .getNameRecord(nameRecordDB, name);
       GNSConfig.getLogger().log(
@@ -572,7 +577,7 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
               "State not read from DB: {0}", e.getMessage());
       e.printStackTrace();
     }
-    return null;*/
+    return null;
   }
 
   /**
