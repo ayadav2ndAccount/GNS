@@ -298,7 +298,13 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
         		
         		if(((CommandPacket) request).getCommandType().isRead())
         		{
-        			System.out.println("The request stack trace "+ Thread.currentThread().getStackTrace());
+        			System.out.println("\nStack trace starting");
+        			StackTraceElement[] stackTraces = Thread.currentThread().getStackTrace();
+        			for(int i=0; i<stackTraces.length; i++)
+        			{
+        				System.out.println("i="+i+" : "+stackTraces[i].toString());
+        			}
+        			System.out.println("Stack trace finished\n");
         		}
         	}
         	
