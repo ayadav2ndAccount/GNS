@@ -17,6 +17,7 @@ package edu.umass.cs.gnsserver.gnsapp;
 
 import edu.umass.cs.contextservice.integration.ContextServiceGNSClient;
 import edu.umass.cs.contextservice.integration.ContextServiceGNSInterface;
+import edu.umass.cs.gigapaxos.PaxosManager;
 import edu.umass.cs.gigapaxos.interfaces.AppRequestParserBytes;
 import edu.umass.cs.gigapaxos.interfaces.ClientMessenger;
 import edu.umass.cs.gigapaxos.interfaces.ClientRequest;
@@ -292,19 +293,11 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
           break;
         case COMMAND:
         {
-        	if(Util.oneIn(1000))
-        	{
-        		System.out.println("GNS command execution thread name "+Thread.currentThread().getName());
-        		
+        	//if(Util.oneIn(1000))
+        	{		
         		if(((CommandPacket) request).getCommandType().isRead())
         		{
-        			System.out.println("\nStack trace starting");
-        			StackTraceElement[] stackTraces = Thread.currentThread().getStackTrace();
-        			for(int i=0; i<stackTraces.length; i++)
-        			{
-        				System.out.println("i="+i+" : "+stackTraces[i].toString());
-        			}
-        			System.out.println("Stack trace finished\n");
+        			PaxosManager.printStackTrace("GNS command execution");
         		}
         	}
         	
