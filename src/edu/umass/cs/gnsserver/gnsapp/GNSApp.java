@@ -292,7 +292,7 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
           break;
         case COMMAND:
         {
-        	/*if(Util.oneIn(100))
+        	if(Util.oneIn(1000))
         	{
         		System.out.println("GNS command execution thread name "+Thread.currentThread().getName());
         		
@@ -306,7 +306,7 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
         			}
         			System.out.println("Stack trace finished\n");
         		}
-        	}*/
+        	}
         	
         	CommandHandler.handleCommandPacket((CommandPacket) request, doNotReplyToClient, this);
         	break;
