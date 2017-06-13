@@ -88,7 +88,7 @@ public class NSUpdateSupport {
     ResponseCode errorCode = ResponseCode.NO_ERROR;
     assert (header != null);
     // No checks for local non-auth commands like verifyAccount or for mutual auth
-    if (!GNSProtocol.INTERNAL_QUERIER.toString().equals(writer)
+    /*if (!GNSProtocol.INTERNAL_QUERIER.toString().equals(writer)
             && !commandPacket.getCommandType().isMutualAuth()) {
       if (!header.verifyInternal()) {
         // This the standard auth check for most updates
@@ -118,7 +118,7 @@ public class NSUpdateSupport {
           }
         }
       }
-    }
+    }*/
     // Check for stale commands.
     if (timestamp != null) {
       if (timestamp.before(DateUtils.addMinutes(new Date(),
@@ -181,7 +181,7 @@ public class NSUpdateSupport {
     // Apply updateEntireValuesMap to record in the database
     nameRecord.updateNameRecord(field, updateValue, oldValue, argument, newValue, operation);
     // This is for MOB-893 - logging updates
-    writeUpdateLog(guid, field, updateValue, newValue, operation);
+    //writeUpdateLog(guid, field, updateValue, newValue, operation);
   }
 
   // This is for MOB-893 - logging updates
