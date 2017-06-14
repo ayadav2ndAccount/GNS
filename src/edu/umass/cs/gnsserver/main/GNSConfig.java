@@ -248,7 +248,14 @@ public class GNSConfig {
      * Turn off active code handling. Default is true.
      * Temporary - The use of this will go away at some point.
      */
-    DISABLE_ACTIVE_CODE(true);
+    DISABLE_ACTIVE_CODE(true),
+    
+    // This is for MOB-893 - logging updates
+    // If true then updates to the GNS are logged separately.
+    // This should be false for any performance measurements, as it is 
+    // an additional logging outside the update protocol of the GNS. 
+    LOG_GNS_UPDATES(false);
+    ;
 
     final Object defaultValue;
     final boolean unsafeTestingOnly;

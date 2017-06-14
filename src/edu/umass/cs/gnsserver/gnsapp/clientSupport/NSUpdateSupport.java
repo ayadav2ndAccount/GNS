@@ -25,6 +25,7 @@ import edu.umass.cs.gnsserver.gnsapp.recordmap.BasicRecordMap;
 import edu.umass.cs.gnsserver.gnsapp.recordmap.NameRecord;
 import edu.umass.cs.gnsserver.interfaces.InternalRequestHeader;
 import edu.umass.cs.gnsserver.main.GNSConfig;
+import edu.umass.cs.gnsserver.main.GNSConfig.GNSC;
 import edu.umass.cs.gnsserver.utils.ResultValue;
 import edu.umass.cs.gnsserver.utils.ValuesMap;
 import edu.umass.cs.utils.Config;
@@ -88,7 +89,7 @@ public class NSUpdateSupport {
     ResponseCode errorCode = ResponseCode.NO_ERROR;
     assert (header != null);
     // No checks for local non-auth commands like verifyAccount or for mutual auth
-    /*if (!GNSProtocol.INTERNAL_QUERIER.toString().equals(writer)
+    if (!GNSProtocol.INTERNAL_QUERIER.toString().equals(writer)
             && !commandPacket.getCommandType().isMutualAuth()) {
       if (!header.verifyInternal()) {
         // This the standard auth check for most updates
@@ -118,7 +119,7 @@ public class NSUpdateSupport {
           }
         }
       }
-    }*/
+    }
     // Check for stale commands.
     if (timestamp != null) {
       if (timestamp.before(DateUtils.addMinutes(new Date(),
@@ -148,7 +149,8 @@ public class NSUpdateSupport {
         return ResponseCode.UPDATE_ERROR;
       }
   }
-
+  
+  
   private static NameRecord getNameRecord(String guid, String field, UpdateOperation operation, BasicRecordMap db) throws RecordNotFoundException, FailedDBOperationException {
     if (operation.isAbleToSkipRead()) {
       // some operations don't require a read first
@@ -181,7 +183,8 @@ public class NSUpdateSupport {
     // Apply updateEntireValuesMap to record in the database
     nameRecord.updateNameRecord(field, updateValue, oldValue, argument, newValue, operation);
     // This is for MOB-893 - logging updates
-    //writeUpdateLog(guid, field, updateValue, newValue, operation);
+    if(Config.getGlobalBoolean(GNSC.LOG_GNS_UPDATES))
+    	writeUpdateLog(guid, field, updateValue, newValue, operation);
   }
 
   // This is for MOB-893 - logging updates
