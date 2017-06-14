@@ -28,7 +28,9 @@ import edu.umass.cs.gnsserver.main.GNSConfig;
 import edu.umass.cs.gnsserver.main.GNSConfig.GNSC;
 import edu.umass.cs.gnsserver.utils.ResultValue;
 import edu.umass.cs.gnsserver.utils.ValuesMap;
+import edu.umass.cs.reconfiguration.ReconfigurationConfig.RC;
 import edu.umass.cs.utils.Config;
+import edu.umass.cs.utils.ThroughputProfiler;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -86,6 +88,11 @@ public class NSUpdateSupport {
           throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException,
           SignatureException, JSONException, IOException, FailedDBOperationException,
           RecordNotFoundException, FieldNotFoundException, InternalRequestException {
+	  
+	  if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
+	  {
+		  ThroughputProfiler.recordIncomingEvent("UpdateSignatureCheck");
+	  }
     ResponseCode errorCode = ResponseCode.NO_ERROR;
     assert (header != null);
     // No checks for local non-auth commands like verifyAccount or for mutual auth
@@ -120,6 +127,12 @@ public class NSUpdateSupport {
         }
       }
     }
+    
+    if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
+    {
+    	ThroughputProfiler.recordOutgoingEvent("UpdateSignatureCheck");
+    }
+    
     // Check for stale commands.
     if (timestamp != null) {
       if (timestamp.before(DateUtils.addMinutes(new Date(),
@@ -133,9 +146,21 @@ public class NSUpdateSupport {
     }
     if (!operation.equals(UpdateOperation.CREATE_INDEX)) {
       // Handle usual case
+    	
+    	if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
+    	{
+    		ThroughputProfiler.recordIncomingEvent("ActualUpdate");
+    	}
+    	
       NameRecord nameRecord = getNameRecord(guid, field, operation, app.getDB());
       updateNameRecord(header, nameRecord, guid, field, operation, updateValue, oldValue, argument, userJSON,
               app.getDB(), app.getActiveCodeHandler());
+      
+      if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
+      {
+    	  ThroughputProfiler.recordOutgoingEvent("ActualUpdate");
+      }
+      
       return ResponseCode.NO_ERROR;
     } else // Handle special case of a create index
      if (!updateValue.isEmpty() && updateValue.get(0) instanceof String) {
