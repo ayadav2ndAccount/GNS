@@ -30,7 +30,6 @@ import edu.umass.cs.gnsserver.utils.ResultValue;
 import edu.umass.cs.gnsserver.utils.ValuesMap;
 import edu.umass.cs.reconfiguration.ReconfigurationConfig.RC;
 import edu.umass.cs.utils.Config;
-import edu.umass.cs.utils.ThroughputProfiler;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -91,7 +90,7 @@ public class NSUpdateSupport {
 	  
 	  if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
 	  {
-		  ThroughputProfiler.recordIncomingEvent("UpdateSignatureCheck");
+		 //ThroughputProfiler.recordIncomingEvent("UpdateSignatureCheck");
 	  }
     ResponseCode errorCode = ResponseCode.NO_ERROR;
     assert (header != null);
@@ -130,7 +129,7 @@ public class NSUpdateSupport {
     
     if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
     {
-    	ThroughputProfiler.recordOutgoingEvent("UpdateSignatureCheck");
+    	//ThroughputProfiler.recordOutgoingEvent("UpdateSignatureCheck");
     }
     
     // Check for stale commands.
@@ -149,7 +148,7 @@ public class NSUpdateSupport {
     	
     	if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
     	{
-    		ThroughputProfiler.recordIncomingEvent("ActualUpdate");
+    		//ThroughputProfiler.recordIncomingEvent("ActualUpdate");
     	}
     	
       NameRecord nameRecord = getNameRecord(guid, field, operation, app.getDB());
@@ -158,7 +157,7 @@ public class NSUpdateSupport {
       
       if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
       {
-    	  ThroughputProfiler.recordOutgoingEvent("ActualUpdate");
+    	  //ThroughputProfiler.recordOutgoingEvent("ActualUpdate");
       }
       
       return ResponseCode.NO_ERROR;

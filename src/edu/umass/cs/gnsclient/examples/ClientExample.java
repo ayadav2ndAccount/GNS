@@ -74,6 +74,7 @@ public class ClientExample {
 			System.out.println("// account GUID creation\n"
 					+ "client.execute(" + ACCOUNT_NAME+")");
 			client.execute(GNSCommand.createAccount(ACCOUNT_NAME));
+			System.out.println("Creation complete");
 			GUID = GuidUtils.getGUIDKeys(ACCOUNT_NAME);
 		} catch (Exception | Error e) {
 			System.out.println("Exception during accountGuid creation: " + e);

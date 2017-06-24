@@ -45,7 +45,6 @@ import edu.umass.cs.gnsserver.utils.ValuesMap;
 import edu.umass.cs.reconfiguration.ReconfigurationConfig.RC;
 import edu.umass.cs.utils.Config;
 import edu.umass.cs.utils.DelayProfiler;
-import edu.umass.cs.utils.ThroughputProfiler;
 import edu.umass.cs.utils.Util;
 
 import org.json.JSONArray;
@@ -278,7 +277,7 @@ public class MongoRecords implements NoSQLRecords {
     try {
     	if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
     	{
-    		ThroughputProfiler.recordIncomingEvent("lookupSomeFieldsThpt");
+    		//ThroughputProfiler.recordIncomingEvent("lookupSomeFieldsThpt");
     	}
     	
       String primaryKey = mongoCollectionSpecs.getCollectionSpec(collectionName).getPrimaryKey().getName();
@@ -342,7 +341,7 @@ public class MongoRecords implements NoSQLRecords {
         hashMap.put(valuesMapField, valuesMap);
         if(Config.getGlobalBoolean(RC.ENABLE_INSTRUMENTATION))
         {
-        	ThroughputProfiler.recordOutgoingEvent("lookupSomeFieldsThpt");
+        	//ThroughputProfiler.recordOutgoingEvent("lookupSomeFieldsThpt");
         }
       }
       

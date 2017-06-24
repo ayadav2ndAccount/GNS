@@ -295,9 +295,10 @@ public class GNSApp extends AbstractReconfigurablePaxosApp<String> implements
         {
         	//if(Util.oneIn(1000))
         	{		
-        		if(((CommandPacket) request).getCommandType().isRead())
+        		if(((CommandPacket) request).getCommandType().isUpdate())
         		{
-        			PaxosManager.printStackTrace("GNS command execution");
+        			//System.out.println("Thread name "+ Thread.currentThread().getName());
+        			//PaxosManager.printStackTrace("GNS command execution");
         		}
         	}
         	
